@@ -21,7 +21,7 @@ This documentation site describes a portable **Network-in-a-Box** cluster built 
 
 ## Topology
 
-![Cluster topology](../diagrams/topology.png)
+![Cluster topology](topology.png)
 
 ## Documentation Sections
 
@@ -29,4 +29,3 @@ This documentation site describes a portable **Network-in-a-Box** cluster built 
 - **Architecture**: node roles, network model, and service placement
 - **Operations**: startup, health checks, and routine management
 - **Disaster Recovery**: node replacement and rebuild guidance
-
