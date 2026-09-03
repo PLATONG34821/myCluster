@@ -1,0 +1,11 @@
+site_name: Portable Hybrid-Arch Docker Swarm Cluster
+site_description: Documentation website for the portable hybrid ARM/x86 Docker Swarm cluster.
+repo_url: https://github.com/PLATONG34821/Portable-Hybrid-Arch-Docker-Swarm-Cluster
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Project Overview: overview.md
+  - Architecture: architecture.md
+  - Operations: operations.md
+  - Disaster Recovery: disaster-recovery.md
