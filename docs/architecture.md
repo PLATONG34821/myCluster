@@ -24,9 +24,9 @@
 |---|---|---|
 | 10.1.0.1 | cubie-1 (`br0`) | Static |
 | 10.1.0.100 – 10.1.0.200 | DHCP pool, 24 h leases | dnsmasq on cubie-1 |
-| 10.1.0.151 | cubie-2 | DHCP reservation by MAC |
-| 10.1.0.180 | cubie-3 | DHCP reservation by MAC |
-| 10.1.0.106 | acer-1, wired | Ordinary DHCP lease |
+| 10.1.0.2 | cubie-2 | Static, set on the board |
+| 10.1.0.3 | cubie-3 | Static, set on the board |
+| 10.1.0.4 | acer-1, wired | Static, set on the board (netplan) |
 | 192.168.1.36 | cubie-1 WAN (`eth1`) | DHCP from the upstream router (192.168.1.1) |
 | 192.168.1.34 | acer-1 Wi-Fi (`wlp2s0`) | DHCP from the upstream router |
 
@@ -48,7 +48,7 @@ Nothing on the WAN side can reach the LAN or any container. On `eth1`, cubie-1 i
 flowchart LR
     client["LAN or Wi-Fi client"]
     dnsmasq["dnsmasq on cubie-1<br/>10.1.0.1:53"]
-    pihole["Pi-hole on cubie-2<br/>10.1.0.151:53"]
+    pihole["Pi-hole on cubie-2<br/>10.1.0.2:53"]
     cf["Cloudflare<br/>1.1.1.1 / 1.0.0.1"]
 
     client -->|"to 10.1.0.1 (from DHCP)<br/>or any other server: redirected"| dnsmasq
@@ -60,7 +60,7 @@ flowchart LR
 1. DHCP gives every client `10.1.0.1` as its only DNS server.
 2. dnsmasq on cubie-1 asks Pi-hole first and uses `1.1.1.1` only when Pi-hole doesn't answer. It passes each client's IP and MAC along, so Pi-hole's statistics show the real devices.
 3. A device that hard-codes another DNS server (8.8.8.8, 1.1.1.1 and so on) on port 53 is redirected to cubie-1 by nftables.
-4. Pi-hole (10.1.0.151) is exempt from the redirect and uses `1.1.1.1` and `1.0.0.1` as its upstream.
+4. Pi-hole (10.1.0.2) is exempt from the redirect and uses `1.1.1.1` and `1.0.0.1` as its upstream.
 5. Encrypted DNS is curbed: DNS-over-TLS and DNS-over-QUIC (port 853) are rejected, and Pi-hole blocks known DNS-over-HTTPS servers. VPNs aren't blocked, so a VPN still bypasses Pi-hole.
 6. cubie-1 resolves its own lookups through `1.1.1.1` and `1.0.0.1` directly, so the router keeps working without cubie-2.
 

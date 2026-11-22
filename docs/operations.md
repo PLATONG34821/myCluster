@@ -20,7 +20,7 @@ If cubie-1's Wi-Fi is down, join the upstream network and hop through acer-1's W
 ssh -J veriton@192.168.1.34 radxa@10.1.0.1
 ```
 
-Web UIs: Portainer at <https://10.1.0.1:9443>, Pi-hole at <http://10.1.0.151/admin>.
+Web UIs: Portainer at <https://10.1.0.1:9443>, Pi-hole at <http://10.1.0.2/admin>.
 
 ## Health checks
 
@@ -66,7 +66,7 @@ sudo apt update && sudo apt full-upgrade
   - `uname -r` shows the new kernel;
   - `ip -br link` shows `eth0`, `eth1` and `wlan0`;
   - on cubie-1, `sudo hostapd_cli -i wlan0 status` shows `state=ENABLED`.
-- **Wrong IP after the reboot:** the board's MAC address changed, as it did with kernel 6.6.98-2. Update its `dhcp-host` line in `/etc/dnsmasq.d/lan.conf` on cubie-1.
+- **No network after the reboot:** check that the interface is still called `eth1` (`net.ifnames=0`); the static `lan` connection is bound to that name.
 - **Docker updates:** on the cubies, Docker CE updates through apt like everything else. Upgrading `docker-ce` restarts Docker and that node's containers; on cubie-1 that includes the Portainer server.
 - **Never purge `docker.io`** on acer-1, or on any node with Docker state. Its removal script deletes `/var/lib/docker`, including the swarm state and volumes.
 

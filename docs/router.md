@@ -123,7 +123,7 @@ That is 5 GHz channel 44 at 80 MHz (centre channel 42), Wi-Fi 4/5/6, WPA2-PSK wi
 
 ## DHCP and DNS
 
-dnsmasq does both, on `br0` only. `/etc/dnsmasq.d/lan.conf`, with the MAC addresses replaced by placeholders:
+dnsmasq does both, on `br0` only. `/etc/dnsmasq.d/lan.conf`:
 
 ```ini
 # LAN DHCP + DNS on br0. DNS forwards to Pi-hole (cubie-2), Cloudflare if Pi-hole is down.
@@ -133,7 +133,7 @@ bind-dynamic
 # DNS: forward only, in order; add-subnet/add-mac let Pi-hole see the real client
 no-resolv
 strict-order
-server=10.1.0.151
+server=10.1.0.2
 server=1.1.1.1
 add-subnet=32,128
 add-mac
@@ -143,9 +143,6 @@ dhcp-range=10.1.0.100,10.1.0.200,24h
 dhcp-option=option:router,10.1.0.1
 dhcp-option=option:dns-server,10.1.0.1
 
-# Reservations
-dhcp-host=<cubie-2 eth1 MAC>,cubie-2,10.1.0.151
-dhcp-host=<cubie-3 eth1 MAC>,cubie-3,10.1.0.180
 ```
 
 | Setting | Effect |
@@ -155,6 +152,7 @@ dhcp-host=<cubie-3 eth1 MAC>,cubie-3,10.1.0.180
 | `add-subnet=32,128` and `add-mac` | Pass each client's IP and MAC to Pi-hole, so its per-client statistics stay accurate |
 | `cache-size=0` | No caching on the router; Pi-hole does the caching |
 | `dhcp-option=option:dns-server,10.1.0.1` | Clients get the router as their only DNS server |
+| No `dhcp-host` lines | The cluster nodes use static addresses `.1`–`.4`, outside the pool, so DHCP only serves other devices |
 
 Tested on 2026-11-22: with Pi-hole scaled to zero, lookups still worked through `1.1.1.1` (unfiltered), and blocking resumed by itself once Pi-hole was back. Pi-hole logged the real client address, not `10.1.0.1`.
 
@@ -172,7 +170,7 @@ table ip nat {
   # Force all LAN DNS through cubie-1 -> Pi-hole (Pi-hole itself talks to upstream directly)
   chain dns_redirect {
     type nat hook prerouting priority dstnat;
-    iifname "br0" ip saddr != 10.1.0.151 ip daddr != { 10.1.0.1, 10.1.0.151 } meta l4proto { tcp, udp } th dport 53 redirect to :53
+    iifname "br0" ip saddr != 10.1.0.2 ip daddr != { 10.1.0.1, 10.1.0.2 } meta l4proto { tcp, udp } th dport 53 redirect to :53
   }
   chain postrouting {
     type nat hook postrouting priority 100;

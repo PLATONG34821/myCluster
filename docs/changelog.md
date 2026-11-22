@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-23: static IPs for every node
+
+- cubie-2 `10.1.0.151` → `10.1.0.2`, cubie-3 `10.1.0.180` → `10.1.0.3`, acer-1 `10.1.0.106` → `10.1.0.4`; cubie-1 stays `10.1.0.1`.
+- Set on each board (NetworkManager connection `lan` on the cubies, netplan on acer-1), not via DHCP, so the nodes keep their addresses even if DHCP on cubie-1 is down.
+- cubie-1: dnsmasq now forwards to Pi-hole at `10.1.0.2`, the nftables DNS redirect exempts `10.1.0.2`, and the old DHCP reservations are gone. Old config backed up in `/root`.
+- Pi-hole admin moved to <http://10.1.0.2/admin>.
+
 ## 2026-11-22: clean rebuild, Docker Swarm, forced DNS
 
 **Starting point:**

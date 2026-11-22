@@ -29,9 +29,9 @@ Start with the router: every other node gets its address, DNS and internet throu
 3. **cubie-2 and cubie-3:**
    - flash them and apply the base system;
    - connect their `eth1` ports to the switch;
-   - put their `eth1` MAC addresses in the `dhcp-host` lines on cubie-1, so they get `.151` and `.180`.
+   - give them static addresses on `eth1`: a NetworkManager connection `lan` with `10.1.0.2/24` or `10.1.0.3/24`, gateway and DNS `10.1.0.1`.
 4. **acer-1:**
-   - install Ubuntu Server, set the hostname `acer-1` and add the mDNS files;
+   - install Ubuntu Server, set the hostname `acer-1`, a static `10.1.0.4/24` on `enp1s0f0` in netplan, and the mDNS files;
    - slim it down as described in [nodes.md](nodes.md#acer-1);
    - `sudo apt install docker.io`.
 5. **Docker on the cubies.** Install Docker CE, because Debian's `docker.io` is too old for Portainer:
@@ -63,7 +63,7 @@ Start with the router: every other node gets its address, DNS and internet throu
 
 1. On cubie-1, remove the old node: `docker node rm --force <hostname>`.
 2. Set up the new board as in steps 1, 3 and 5 above, with the same hostname.
-3. Update its `dhcp-host` MAC address on cubie-1 and restart dnsmasq.
+3. Give it its static address (`lan` connection on `eth1`).
 4. Join it to the swarm.
 5. **cubie-2 only:** Pi-hole's volume was on the old board, so the Pi-hole service starts again with default settings. Set the password through the stack file and re-add the blocklists. Until then, DNS goes through the `1.1.1.1` fallback.
 

@@ -27,6 +27,8 @@ Measured on 2026-11-22:
 
 ## Cubie base system
 
+The cubies have static LAN addresses set on the board in a NetworkManager connection called `lan` on `eth1` (cubie-2 `10.1.0.2`, cubie-3 `10.1.0.3`, gateway and DNS `10.1.0.1`), so they keep them even if DHCP on cubie-1 is down.
+
 The three cubies have an identical package set; cubie-1 adds only `dnsmasq`, `hostapd` and `nftables`. Each runs nothing but the basics: NetworkManager, ssh, avahi, journald, udev, getty and time sync, plus Docker. cubie-1 adds its [router services](router.md).
 
 ### Removed
@@ -71,7 +73,7 @@ U-Boot's `timeout 10` is in tenths of a second, so the boot menu already waits o
   - `/etc/systemd/resolved.conf.d/mdns.conf`: `[Resolve]` `MulticastDNS=yes`
   - `/etc/systemd/network/10-netplan-enp1s0f0.network.d/mdns.conf` and the same for `wlp2s0`: `[Network]` `MulticastDNS=yes`
 - **Network (netplan with systemd-networkd):**
-  - `enp1s0f0` is wired, with DHCP from cubie-1 (10.1.0.106).
+  - `enp1s0f0` is wired, static 10.1.0.4/24, gateway and DNS 10.1.0.1 (old netplan file backed up in `/root`).
   - `wlp2s0` is on the upstream Wi-Fi (192.168.1.34). It's kept on purpose as a way into the LAN when cubie-1's Wi-Fi is down: SSH to 192.168.1.34, then hop to 10.1.0.x.
 - **Removed (about 265 packages):**
   - snapd and its snaps;

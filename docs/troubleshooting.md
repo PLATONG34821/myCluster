@@ -18,8 +18,8 @@ Problems hit while building this setup, with their causes and fixes.
 ### Nodes come back with the wrong IP or `end0`/`end1` interfaces
 
 - **Seen when:** after `apt full-upgrade` installed Radxa kernel 6.6.98-2.
-- **Cause:** the new kernel renamed the Ethernet interfaces (`eth1` → `end1`) and changed the boards' MAC addresses, so the DHCP reservations stopped matching.
-- **Fix:** add `net.ifnames=0` to `/etc/kernel/cmdline` and every entry in `/boot/extlinux/extlinux.conf`, then put the new MAC addresses in the `dhcp-host` lines of `/etc/dnsmasq.d/lan.conf`. The new MAC addresses stayed the same across later reboots.
+- **Cause:** the new kernel renamed the Ethernet interfaces (`eth1` → `end1`) and changed the boards' MAC addresses, so the DHCP reservations used at the time stopped matching. (The nodes now use static IPs, so a MAC change no longer moves them.)
+- **Fix:** add `net.ifnames=0` to `/etc/kernel/cmdline` and every entry in `/boot/extlinux/extlinux.conf`.
 
 ### Wi-Fi access point moves to the USB dongle
 

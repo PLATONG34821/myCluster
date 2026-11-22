@@ -80,7 +80,7 @@ Portainer LTS needs Docker API 1.51 or newer. Debian's own `docker.io` 26 offers
 
 | | |
 |---|---|
-| Admin | <http://10.1.0.151/admin> or <http://cubie-2.local/admin> |
+| Admin | <http://10.1.0.2/admin> or <http://cubie-2.local/admin> |
 | Image | `pihole/pihole:latest`, container hostname `pihole` |
 | Runs on | cubie-2 only (placement constraint) |
 | Ports | 53/tcp, 53/udp and 80/tcp in host mode on cubie-2 |
